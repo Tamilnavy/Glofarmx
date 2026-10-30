@@ -33,8 +33,6 @@ export const siteConfig = {
     { label: "Export Process", href: "#export-process" },
     { label: "Contact", href: "#contact" },
   ],
-
-  initialMarket: "Dubai and the UAE",
 } as const;
 
 export function buildMailtoHref(subject: string, body: string): string {

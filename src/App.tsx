@@ -2,6 +2,7 @@ import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { Marquee } from "./components/Marquee";
 import { ScrollProgressBar } from "./components/ScrollProgressBar";
+import { FloatingActions } from "./components/FloatingActions";
 import { HeroSection } from "./sections/HeroSection";
 import { HighlightsSection } from "./sections/HighlightsSection";
 import { ProductsSection } from "./sections/ProductsSection";
@@ -41,6 +42,7 @@ function App() {
         <ContactSection />
       </main>
       <Footer />
+      <FloatingActions />
     </div>
   );
 }

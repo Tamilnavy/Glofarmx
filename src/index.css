@@ -57,6 +57,11 @@
     .animate-marquee {
       animation: none;
     }
+
+    .animate-ping {
+      animation: none;
+      display: none;
+    }
   }
 }
 

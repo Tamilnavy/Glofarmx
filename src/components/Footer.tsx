@@ -1,5 +1,6 @@
 import { siteConfig } from "../config/site";
-import logoMarkGold from "../assets/brand/mark-gold-96.png";
+import logoLight from "../assets/brand/footer-logo-light.png";
+import iconFooter from "../assets/brand/icon-footer.png";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -9,14 +10,17 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-2">
-            <div className="flex items-center gap-2.5">
-              <img src={logoMarkGold} alt="" width={36} height={36} className="h-9 w-9" />
-              <p className="font-heading text-xl font-extrabold text-white">{siteConfig.brandName}</p>
+            <div className="flex items-center gap-3">
+              <img src={iconFooter} alt="" className="h-8 w-auto shrink-0 object-contain" />
+              <img
+                src={logoLight}
+                alt={siteConfig.brandName}
+                className="h-9 w-auto max-w-[150px] object-contain"
+              />
             </div>
-            <p className="mt-3 max-w-sm text-sm leading-relaxed text-white/70">
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/70">
               A sourcing partner for fresh Indian agricultural produce, connecting quality
-              growers with international importers and distributors, starting with{" "}
-              {siteConfig.initialMarket}.
+              growers with international importers and distributors.
             </p>
           </div>
 

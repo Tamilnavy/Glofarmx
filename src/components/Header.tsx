@@ -3,11 +3,14 @@ import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { siteConfig } from "../config/site";
 import { Button } from "./Button";
-import logoMark from "../assets/brand/mark-96.png";
+import logoDark from "../assets/brand/header-logo-dark.png";
+import logoLight from "../assets/brand/header-logo-light.png";
+import iconHeader from "../assets/brand/icon-header.png";
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeHash, setActiveHash] = useState("#home");
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 8);
@@ -23,6 +26,26 @@ export function Header() {
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    const sections = siteConfig.nav
+      .map((item) => document.querySelector(item.href))
+      .filter((el): el is Element => el !== null);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length > 0) {
+          const topMost = visible.reduce((a, b) => (a.boundingClientRect.top < b.boundingClientRect.top ? a : b));
+          setActiveHash(`#${topMost.target.id}`);
+        }
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0 },
+    );
+
+    sections.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   const solid = isScrolled || isOpen;
 
   return (
@@ -32,35 +55,43 @@ export function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
-        <a href="#home" className="flex items-center gap-2.5">
-          <img src={logoMark} alt="" width={36} height={36} className="h-8 w-8 rounded-lg sm:h-9 sm:w-9" />
-          <span
-            className={`font-heading text-xl font-extrabold tracking-tight transition-colors duration-300 sm:text-2xl ${
-              solid ? "text-forest-dark" : "text-white"
-            }`}
-          >
-            {siteConfig.brandName}
-          </span>
+        <a href="#home" className="flex shrink-0 items-center gap-3 sm:gap-4" aria-label={siteConfig.brandName}>
+          <img src={iconHeader} alt="" className="h-8 w-auto shrink-0 object-contain sm:h-[42px]" />
+          <img
+            src={solid ? logoDark : logoLight}
+            alt={siteConfig.brandName}
+            className="h-9 w-auto max-w-[130px] object-contain sm:h-[46px] sm:max-w-[170px]"
+          />
         </a>
 
         <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
-          {siteConfig.nav.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className={`group relative text-sm font-medium transition-colors duration-300 ${
-                solid ? "text-slate hover:text-forest" : "text-white/90 hover:text-white"
-              }`}
-            >
-              {item.label}
-              <span
-                className={`absolute inset-x-0 -bottom-1 h-px origin-left scale-x-0 transition-transform duration-300 ease-out group-hover:scale-x-100 ${
-                  solid ? "bg-forest" : "bg-white"
+          {siteConfig.nav.map((item) => {
+            const isActive = activeHash === item.href;
+            return (
+              <a
+                key={item.href}
+                href={item.href}
+                aria-current={isActive ? "true" : undefined}
+                className={`group relative text-sm font-medium transition-colors duration-300 ${
+                  solid
+                    ? isActive
+                      ? "text-forest"
+                      : "text-slate hover:text-forest"
+                    : isActive
+                      ? "text-white"
+                      : "text-white/90 hover:text-white"
                 }`}
-                aria-hidden="true"
-              />
-            </a>
-          ))}
+              >
+                {item.label}
+                <span
+                  className={`absolute inset-x-0 -bottom-1 h-px origin-left transition-transform duration-300 ease-out ${
+                    isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                  } ${solid ? "bg-forest" : "bg-white"}`}
+                  aria-hidden="true"
+                />
+              </a>
+            );
+          })}
         </nav>
 
         <div className="hidden lg:block">

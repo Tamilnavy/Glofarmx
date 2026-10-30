@@ -9,7 +9,7 @@
     <title>Glofarmx — Indian Agricultural Produce Exporter | Fresh Vegetables for Global Buyers</title>
     <meta
       name="description"
-      content="Glofarmx is a sourcing partner for fresh Indian agricultural produce, connecting quality growers with international importers and distributors across Dubai, the UAE, and global markets."
+      content="Glofarmx is a sourcing partner for fresh Indian agricultural produce, connecting quality growers with international importers and distributors across global markets."
     />
     <meta
       name="keywords"
@@ -40,6 +40,46 @@
       href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&family=Manrope:wght@500;600;700;800&display=swap"
       rel="stylesheet"
     />
+
+    <!--
+      TODO before relying on this for Google Search Console: confirm
+      https://www.glofarmx.com is the real, owned, deployed domain. Every
+      URL below (this script, robots.txt, sitemap.xml, canonical, og:url)
+      uses it as a placeholder and must be updated together if it changes.
+    -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://www.glofarmx.com/#organization",
+            "name": "Glofarmx",
+            "url": "https://www.glofarmx.com/",
+            "logo": "https://www.glofarmx.com/apple-touch-icon.png",
+            "description": "Glofarmx is a sourcing partner for fresh Indian agricultural produce, connecting quality growers with international importers and distributors across global markets."
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://www.glofarmx.com/#website",
+            "name": "Glofarmx",
+            "url": "https://www.glofarmx.com/",
+            "publisher": { "@id": "https://www.glofarmx.com/#organization" }
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "name": ["Home", "Products", "Why Glofarmx", "Export Process", "Contact"],
+            "url": [
+              "https://www.glofarmx.com/#home",
+              "https://www.glofarmx.com/#products",
+              "https://www.glofarmx.com/#why-glofarmx",
+              "https://www.glofarmx.com/#export-process",
+              "https://www.glofarmx.com/#contact"
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

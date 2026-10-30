@@ -1,5 +1,6 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion, useSpring } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import { useRef } from "react";
 import type { Product } from "../data/products";
 import { localProductImages } from "../data/productImages";
 import { buildMailtoHref, buildWhatsappHref } from "../config/site";
@@ -9,6 +10,8 @@ import { LocalResponsiveImage } from "./LocalResponsiveImage";
 interface ProductCardProps {
   product: Product;
 }
+
+const canTilt = typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches;
 
 export function ProductCard({ product }: ProductCardProps) {
   const subject = `Enquiry: ${product.name}`;
@@ -20,8 +23,31 @@ export function ProductCard({ product }: ProductCardProps) {
   const enquiryHref = mailHref || whatsappHref || "#contact";
   const localSet = product.image.localKey ? localProductImages[product.image.localKey] : undefined;
 
+  const prefersReducedMotion = useReducedMotion();
+  const cardRef = useRef<HTMLElement>(null);
+  const rotateX = useSpring(0, { stiffness: 300, damping: 25 });
+  const rotateY = useSpring(0, { stiffness: 300, damping: 25 });
+
+  function handleMouseMove(e: React.MouseEvent<HTMLElement>) {
+    if (!canTilt || prefersReducedMotion || !cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    rotateY.set(px * 10);
+    rotateX.set(py * -10);
+  }
+
+  function handleMouseLeave() {
+    rotateX.set(0);
+    rotateY.set(0);
+  }
+
   return (
     <motion.article
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={canTilt && !prefersReducedMotion ? { rotateX, rotateY, transformPerspective: 800 } : undefined}
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
