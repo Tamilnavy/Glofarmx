@@ -6,7 +6,11 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-forest-dark text-white/80">
+    <footer className="relative bg-forest-dark text-white/80">
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-fresh to-transparent"
+      />
       <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-2">
@@ -31,7 +35,11 @@ export function Footer() {
             <ul className="mt-4 flex flex-col gap-2">
               {siteConfig.nav.map((item) => (
                 <li key={item.href}>
-                  <a href={item.href} className="text-sm text-white/75 hover:text-white">
+                  <a
+                    href={item.href}
+                    className="group inline-flex items-center gap-1.5 text-sm text-white/75 transition-colors hover:text-white"
+                  >
+                    <span className="h-px w-0 bg-fresh transition-all duration-300 group-hover:w-3" aria-hidden="true" />
                     {item.label}
                   </a>
                 </li>
@@ -45,18 +53,30 @@ export function Footer() {
             </p>
             <ul className="mt-4 flex flex-col gap-2">
               <li>
-                <a href="#products" className="text-sm text-white/75 hover:text-white">
+                <a
+                  href="#products"
+                  className="group inline-flex items-center gap-1.5 text-sm text-white/75 transition-colors hover:text-white"
+                >
+                  <span className="h-px w-0 bg-fresh transition-all duration-300 group-hover:w-3" aria-hidden="true" />
                   Browse products
                 </a>
               </li>
               <li>
-                <a href="#contact" className="text-sm text-white/75 hover:text-white">
+                <a
+                  href="#contact"
+                  className="group inline-flex items-center gap-1.5 text-sm text-white/75 transition-colors hover:text-white"
+                >
+                  <span className="h-px w-0 bg-fresh transition-all duration-300 group-hover:w-3" aria-hidden="true" />
                   Contact us
                 </a>
               </li>
               {siteConfig.privacyPolicyUrl && (
                 <li>
-                  <a href={siteConfig.privacyPolicyUrl} className="text-sm text-white/75 hover:text-white">
+                  <a
+                    href={siteConfig.privacyPolicyUrl}
+                    className="group inline-flex items-center gap-1.5 text-sm text-white/75 transition-colors hover:text-white"
+                  >
+                    <span className="h-px w-0 bg-fresh transition-all duration-300 group-hover:w-3" aria-hidden="true" />
                     Privacy Policy
                   </a>
                 </li>

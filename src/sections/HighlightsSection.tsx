@@ -46,9 +46,10 @@ export function HighlightsSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.45, ease: "easeOut", delay: index * 0.08 }}
-                className="flex flex-col gap-4 rounded-xl border border-forest/10 bg-bg-light p-7"
+                whileHover={{ y: -4 }}
+                className="group flex flex-col gap-4 rounded-xl border border-forest/10 bg-bg-light p-7 transition-all duration-300 hover:border-fresh/40 hover:bg-white hover:shadow-xl hover:shadow-forest/10"
               >
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-forest/10 text-forest">
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-forest/10 text-forest transition-colors duration-300 group-hover:bg-forest group-hover:text-white">
                   <Icon size={24} strokeWidth={1.75} aria-hidden="true" />
                 </span>
                 <h3 className="text-lg font-bold text-forest-dark">{item.title}</h3>

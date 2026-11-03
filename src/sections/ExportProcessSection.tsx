@@ -62,9 +62,10 @@ export function ExportProcessSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.45, ease: "easeOut", delay: index * 0.07 }}
-                className="relative flex flex-col gap-3 rounded-xl border border-forest/10 bg-bg-light p-6"
+                whileHover={{ y: -4 }}
+                className="group relative flex flex-col gap-3 rounded-xl border border-forest/10 bg-bg-light p-6 transition-all duration-300 hover:border-gold/50 hover:bg-white hover:shadow-xl hover:shadow-forest/10"
               >
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-forest font-heading text-sm font-bold text-white">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-forest font-heading text-sm font-bold text-white transition-colors duration-300 group-hover:bg-gold group-hover:text-forest-dark">
                   {index + 1}
                 </span>
                 <h3 className="font-semibold text-forest-dark">{step.title}</h3>
