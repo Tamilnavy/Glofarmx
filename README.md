@@ -3,8 +3,10 @@
 A premium, single-page marketing site for Glofarmx, an Indian agricultural produce
 export business targeting international B2B buyers (initial focus: Dubai/UAE).
 
-Frontend-only. No backend, database, or authentication — enquiries go out via
-`mailto:` and WhatsApp deep links using contact details you configure yourself.
+Frontend-only. No custom backend or database — the enquiry form emails you
+directly via [Web3Forms](https://web3forms.com) (a free form-to-email
+service), with WhatsApp deep links and `mailto:` as fallbacks using contact
+details you configure yourself.
 
 ## Tech stack
 
@@ -46,11 +48,29 @@ Everything below is intentionally left blank/placeholder in the code. The site
 is built so that related UI (email link, WhatsApp button) **hides itself**
 rather than showing a fake or broken contact method when a value is missing.
 
+### Get enquiries emailed to you (recommended)
+
+1. Go to [web3forms.com](https://web3forms.com) and enter the inbox you want
+   enquiries delivered to. You'll get a free Access Key by email instantly —
+   no account signup required.
+2. Copy `.env.example` to `.env.local` and paste the key:
+   ```
+   VITE_WEB3FORMS_ACCESS_KEY=your-key-here
+   ```
+3. Restart `npm run dev` (or rebuild). The "Submit Enquiry" form now POSTs
+   straight to Web3Forms and the customer never needs to open their own email
+   app — you just receive the enquiry by email.
+
+If `VITE_WEB3FORMS_ACCESS_KEY` is not set, the form falls back to the
+`mailto:` behavior described below (requires `contactEmail` to be set), or
+shows a "this is a demo form" notice if neither is configured.
+
 Edit **`src/config/site.ts`**:
 
 | Field | What it does |
 |---|---|
-| `contactEmail` | Real business inbox. Powers the "Submit Enquiry" form (opens the visitor's email client via `mailto:`) and per-product "Enquire About This Product" links. Leave empty and the contact form shows a clear "this is a demo form" notice instead of a fake success message. |
+| `web3formsAccessKey` | Read from `VITE_WEB3FORMS_ACCESS_KEY` (see above). When set, the contact form sends real emails directly — no visitor email client involved. |
+| `contactEmail` | Real business inbox. Fallback used only when `web3formsAccessKey` is not set — opens the visitor's email client via `mailto:` for the "Submit Enquiry" form and per-product "Enquire About This Product" links. |
 | `whatsappNumber` | Real WhatsApp Business number, digits only, international format (e.g. `971501234567` for a UAE number). Powers the WhatsApp button. Leave empty and the button is hidden from public visitors (a dev-only placeholder shows locally instead). |
 | `privacyPolicyUrl` | Only set this once an actual privacy policy page exists. Leave empty to hide the footer link. |
 

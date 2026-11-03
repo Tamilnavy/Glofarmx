@@ -15,6 +15,15 @@ export const siteConfig = {
   contactEmail: "",
 
   /**
+   * Web3Forms access key (https://web3forms.com) — lets the "Submit Enquiry"
+   * form email you directly without opening the visitor's own mail app.
+   * Get a free key by entering your inbox at web3forms.com, then set
+   * VITE_WEB3FORMS_ACCESS_KEY in a `.env.local` file (see `.env.example`).
+   * Leave unset and the form falls back to the `mailto:` behavior below.
+   */
+  web3formsAccessKey: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY ?? "",
+
+  /**
    * WhatsApp business number in international format, digits only, e.g. "971501234567".
    * Leave empty to hide the WhatsApp button for public visitors.
    */

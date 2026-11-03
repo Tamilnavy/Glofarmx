@@ -6,6 +6,8 @@ import { WhatsAppButton } from "../components/WhatsAppButton";
 import { buildMailtoHref, siteConfig } from "../config/site";
 import { products } from "../data/products";
 
+const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
+
 interface FormState {
   name: string;
   company: string;
@@ -31,9 +33,12 @@ const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export function ContactSection() {
   const [form, setForm] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<Errors>({});
-  const [status, setStatus] = useState<"idle" | "success" | "unavailable">("idle");
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error" | "unavailable">(
+    "idle",
+  );
 
-  const hasMailChannel = Boolean(siteConfig.contactEmail);
+  const hasWeb3Forms = Boolean(siteConfig.web3formsAccessKey);
+  const hasMailChannel = hasWeb3Forms || Boolean(siteConfig.contactEmail);
 
   function validate(values: FormState): Errors {
     const next: Errors = {};
@@ -52,7 +57,7 @@ export function ContactSection() {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const nextErrors = validate(form);
     setErrors(nextErrors);
@@ -68,6 +73,38 @@ export function ContactSection() {
     }
 
     const subject = `Sourcing enquiry from ${form.name}${form.company ? ` (${form.company})` : ""}`;
+
+    if (hasWeb3Forms) {
+      setStatus("submitting");
+      try {
+        const response = await fetch(WEB3FORMS_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            access_key: siteConfig.web3formsAccessKey,
+            subject,
+            from_name: form.name,
+            name: form.name,
+            company: form.company || undefined,
+            email: form.email,
+            country: form.country,
+            product_of_interest: form.product || undefined,
+            message: form.message,
+          }),
+        });
+        const result = await response.json();
+        if (response.ok && result.success) {
+          setForm(initialState);
+          setStatus("success");
+        } else {
+          setStatus("error");
+        }
+      } catch {
+        setStatus("error");
+      }
+      return;
+    }
+
     const body = [
       `Name: ${form.name}`,
       form.company ? `Company: ${form.company}` : null,
@@ -205,11 +242,24 @@ export function ContactSection() {
             />
 
             <div aria-live="polite">
-              {status === "success" && (
+              {status === "success" && hasWeb3Forms && (
+                <p className="flex items-center gap-2 rounded-md bg-fresh/10 px-4 py-3 text-sm font-medium text-forest-dark">
+                  <CheckCircle2 size={18} className="shrink-0 text-fresh" />
+                  Thanks — your enquiry has been sent. We'll get back to you shortly.
+                </p>
+              )}
+              {status === "success" && !hasWeb3Forms && (
                 <p className="flex items-center gap-2 rounded-md bg-fresh/10 px-4 py-3 text-sm font-medium text-forest-dark">
                   <CheckCircle2 size={18} className="shrink-0 text-fresh" />
                   Your email app should now open with these details pre-filled — please press
                   send there to reach us. This form does not submit directly to a server.
+                </p>
+              )}
+              {status === "error" && (
+                <p className="flex items-center gap-2 rounded-md bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+                  <AlertCircle size={18} className="shrink-0" />
+                  Something went wrong sending your enquiry. Please try again or reach us on
+                  WhatsApp.
                 </p>
               )}
               {status === "unavailable" && (
@@ -221,8 +271,13 @@ export function ContactSection() {
               )}
             </div>
 
-            <Button type="submit" variant="primary" className="w-full sm:w-auto">
-              Submit Enquiry
+            <Button
+              type="submit"
+              variant="primary"
+              className="w-full sm:w-auto"
+              disabled={status === "submitting"}
+            >
+              {status === "submitting" ? "Sending…" : "Submit Enquiry"}
             </Button>
           </form>
 
