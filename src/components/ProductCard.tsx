@@ -55,7 +55,7 @@ export function ProductCard({ product }: ProductCardProps) {
       whileHover={{ y: -6 }}
       className="group flex flex-col overflow-hidden rounded-xl border border-forest/10 bg-white shadow-sm transition-shadow duration-300 hover:shadow-xl hover:shadow-forest/10"
     >
-      <div className="aspect-[4/3] w-full overflow-hidden bg-bg-light">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-bg-light">
         {localSet ? (
           <LocalResponsiveImage
             set={localSet}
@@ -74,6 +74,13 @@ export function ProductCard({ product }: ProductCardProps) {
             objectPosition={product.image.position ?? "center"}
           />
         )}
+        <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold tracking-wide text-forest-dark shadow-sm backdrop-blur-sm">
+          {product.category}
+        </span>
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/0 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        />
       </div>
 
       <div className="flex flex-1 flex-col gap-2 p-5">
@@ -84,10 +91,10 @@ export function ProductCard({ product }: ProductCardProps) {
         <a
           href={enquiryHref}
           {...(enquiryHref === whatsappHref ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-          className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-forest transition-colors hover:text-fresh"
+          className="mt-3 inline-flex w-fit items-center gap-1.5 rounded-full border border-forest/15 px-4 py-2 text-sm font-semibold text-forest transition-all duration-200 hover:border-fresh hover:bg-fresh hover:text-white hover:shadow-md hover:shadow-fresh/20"
         >
-          Enquire About This Product
-          <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+          Enquire Now
+          <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </a>
       </div>
     </motion.article>
